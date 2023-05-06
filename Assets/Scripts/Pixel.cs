@@ -4,18 +4,25 @@ using UnityEngine;
 
 public class Pixel : MonoBehaviour
 {
-    private SpriteRenderer spriteRenderer;
+    [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private bool alive;
 
-    // Start is called before the first frame update
+    GameOfLife game;
+
+    private float positionX;
+    private float positionY;
+
     private void Start()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        game = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameOfLife>();
+        positionX = transform.position.x;
+        positionY = transform.position.y;
     }
 
     // Update is called once per frame
     private void Update()
     {
+        CheckStatus();
         ChangeColor();
     }
 
@@ -29,6 +36,11 @@ public class Pixel : MonoBehaviour
         {
             spriteRenderer.color = Color.black;
         }
+    }
+
+    void CheckStatus()
+    {
+        alive = game.GetStatus((int) positionX, (int) positionY);
     }
 
 
