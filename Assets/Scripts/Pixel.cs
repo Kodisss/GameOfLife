@@ -5,7 +5,7 @@ using UnityEngine;
 public class Pixel : MonoBehaviour
 {
     private SpriteRenderer spriteRenderer;
-    private bool alive;
+    [SerializeField] private bool alive;
 
     // Start is called before the first frame update
     private void Start()
