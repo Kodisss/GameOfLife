@@ -36,7 +36,7 @@ public class CameraSizeManager : MonoBehaviour
     {
         if (mode == "endless")
         {
-            offset = 6;
+            offset = 8;
         }
         else if (mode == "mirror")
         {

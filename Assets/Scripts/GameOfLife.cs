@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -60,14 +61,18 @@ public class GameOfLife : MonoBehaviour
 
     private void UpdateGrid()
     {
-        for(int i = 0; i < sizeWithOffset; i++)
+        bool[,] newGeneration = new bool[sizeWithOffset, sizeWithOffset]; // Create a new array for the next generation
+
+        for (int i = 0; i < sizeWithOffset; i++)
         {
-            for(int j = 0; j < sizeWithOffset; j++)
+            for (int j = 0; j < sizeWithOffset; j++)
             {
                 LifeOrDeathOfACell(i, j, CheckNeighboorCells(i, j));
+                newGeneration[i, j] = nextGeneration[i, j]; // Copy the updated state to the new array
             }
         }
-        cellGrid = nextGeneration;
+
+        cellGrid = newGeneration; // Assign the new generation to cellGrid
     }
 
     private int CheckNeighboorCells(int positionX, int positionY)
@@ -82,7 +87,7 @@ public class GameOfLife : MonoBehaviour
             }
         }
 
-        if(debug && res != 0) Debug.Log("Cell[" + positionX + "][" + positionY + "] has " + res + " neighboors.");
+        if(debug && res > 1 && res < 6) Debug.Log("Cell[" + positionX + "][" + positionY + "] has " + res + " neighboors.");
 
         return res;
     }
@@ -99,35 +104,25 @@ public class GameOfLife : MonoBehaviour
             {
                 return 0;
             }
-            else
+            else if(cellGrid[checkedPositionX, checkedPositionY])
             {
                 //if (debug) Debug.Log("i = " + i + " j = " + j);
-                if (cellGrid[checkedPositionX, checkedPositionY]) return 1;
+                return 1;
             }
         }
         else if(mode == "mirror")
         {
-            if (checkedPositionX < 0)
+            checkedPositionX = (checkedPositionX + sizeWithOffset) % sizeWithOffset;
+            checkedPositionY = (checkedPositionY + sizeWithOffset) % sizeWithOffset;
+
+            if (checkedPositionX == cellPositionX && checkedPositionY == cellPositionY)
             {
-                checkedPositionX = sizeWithOffset;
+                return 0;
             }
-            if (checkedPositionY < 0)
-            {
-                checkedPositionY = sizeWithOffset;
-            }
-            if (checkedPositionX >= sizeWithOffset)
-            {
-                checkedPositionX = 0;
-            }
-            if (checkedPositionY >= sizeWithOffset)
-            {
-                checkedPositionY = 0;
-            }
-            if (checkedPositionX == cellPositionX && checkedPositionY == cellPositionY) { }
-            else
+            else if (cellGrid[checkedPositionX, checkedPositionY])
             {
                 //if (debug) Debug.Log("i = " + i + " j = " + j);
-                if (cellGrid[checkedPositionX, checkedPositionY]) return 1;
+                return 1;
             }
         }
 
@@ -142,9 +137,9 @@ public class GameOfLife : MonoBehaviour
         }
         else if (neighboorsValue == 2)
         {
-            nextGeneration[positionY, positionX] = cellGrid[positionX, positionY];
+            nextGeneration[positionX, positionY] = cellGrid[positionX, positionY];
         }
-        else
+        else 
         {
             nextGeneration[positionX, positionY] = false;
         }
@@ -190,7 +185,7 @@ public class GameOfLife : MonoBehaviour
     {
         if (mode == "endless")
         {
-            offset = 6;
+            offset = 8;
         }
         else if (mode == "mirror")
         {
