@@ -81,7 +81,8 @@ public class GameOfLife : MonoBehaviour
                 res += BorderGestion(positionX, positionY, i, j);
             }
         }
-        if(debug) Debug.Log("Cell[" + positionX + "][" + positionY + "] has " + res + " neighboors.");
+
+        if(debug && res != 0) Debug.Log("Cell[" + positionX + "][" + positionY + "] has " + res + " neighboors.");
 
         return res;
     }
@@ -90,8 +91,14 @@ public class GameOfLife : MonoBehaviour
     {
         if(mode == "endless")
         {
-            if (checkedPositionX < 0 || checkedPositionY < 0 || checkedPositionX >= sizeWithOffset || checkedPositionY >= sizeWithOffset) { }
-            else if (checkedPositionX == cellPositionX && checkedPositionY == cellPositionY) { }
+            if (checkedPositionX < 0 || checkedPositionY < 0 || checkedPositionX >= sizeWithOffset || checkedPositionY >= sizeWithOffset)
+            {
+                return 0;
+            }
+            else if (checkedPositionX == cellPositionX && checkedPositionY == cellPositionY)
+            {
+                return 0;
+            }
             else
             {
                 //if (debug) Debug.Log("i = " + i + " j = " + j);
@@ -172,10 +179,11 @@ public class GameOfLife : MonoBehaviour
                 nextGeneration[i, j] = false;
             }
         }
-        cellGrid[4, 4] = true;
-        cellGrid[3, 4] = true;
-        cellGrid[4, 3] = true;
-        cellGrid[3, 3] = true;
+        cellGrid[4, 18] = true;
+        cellGrid[5, 17] = true;
+        cellGrid[6, 17] = true;
+        cellGrid[6, 18] = true;
+        cellGrid[6, 19] = true;
     }
 
     private void CalculateOffset()
