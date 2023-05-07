@@ -9,14 +9,13 @@ public class CameraSizeManager : MonoBehaviour
 
     private float cameraSize;
     private float offset;
-    private string mode;
 
     // Start is called before the first frame update
     private void Start()
     {
         InitializeDependencies();
         InitializeAttributes();
-        CalculateOffset();
+        offset = game.CalculateOffset();
         SetupCamera();
     }
 
@@ -29,19 +28,6 @@ public class CameraSizeManager : MonoBehaviour
     private void InitializeAttributes()
     {
         cameraSize = game.GetGridSize() / 2f;
-        mode = game.GetMode();
-    }
-
-    private void CalculateOffset()
-    {
-        if (mode == "endless")
-        {
-            offset = 8;
-        }
-        else if (mode == "mirror")
-        {
-            offset = 0;
-        }
     }
 
     private void SetupCamera()

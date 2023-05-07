@@ -24,7 +24,7 @@ public class GameOfLife : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        CalculateOffset();
+        offset = CalculateOffset();
         sizeWithOffset = gridSize + offset;
         CreateGrids();
         SpawnTiles();
@@ -96,9 +96,9 @@ public class GameOfLife : MonoBehaviour
     {
         if(mode == "endless")
         {
-            if (checkedPositionX < 0 || checkedPositionY < 0 || checkedPositionX >= sizeWithOffset || checkedPositionY >= sizeWithOffset)
+            if (checkedPositionX < 1 || checkedPositionY < 1 || checkedPositionX >= sizeWithOffset - 1 || checkedPositionY >= sizeWithOffset - 1)
             {
-                return 0;
+                return 10;
             }
             else if (checkedPositionX == cellPositionX && checkedPositionY == cellPositionY)
             {
@@ -170,26 +170,43 @@ public class GameOfLife : MonoBehaviour
         {
             for (int j = 0; j < sizeWithOffset; j++)
             {
-                cellGrid[i, j] = false;
+                cellGrid[i, j] = Random.value < 0.5f;
                 nextGeneration[i, j] = false;
             }
         }
-        cellGrid[4, 18] = true;
-        cellGrid[5, 17] = true;
-        cellGrid[6, 17] = true;
-        cellGrid[6, 18] = true;
-        cellGrid[6, 19] = true;
     }
 
-    private void CalculateOffset()
+    public int CalculateOffset()
     {
         if (mode == "endless")
         {
-            offset = 8;
+            return 12;
         }
         else if (mode == "mirror")
         {
-            offset = 0;
+            return 0;
         }
+
+        return 0;
     }
+
+    /////////////////// STRUCTURE MAKERS /////////////////////
+    public void ButtonSpawnGlider()
+    {
+        cellGrid[8, 18] = true;
+        cellGrid[9, 17] = true;
+        cellGrid[10, 17] = true;
+        cellGrid[10, 18] = true;
+        cellGrid[10, 19] = true;
+    }
+
+    public void SpawnGlider(int posX = 6, int posY = 17)
+    {
+        cellGrid[posX - 2, posY + 1] = true;
+        cellGrid[posX - 1, posY] = true;
+        cellGrid[posX, posY] = true;
+        cellGrid[posX, posY + 1] = true;
+        cellGrid[posX, posY + 2] = true;
+    }
+    /////////////////////////////////////////////////////////////
 }
