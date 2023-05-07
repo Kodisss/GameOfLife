@@ -501,7 +501,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilePrefab: {fileID: 1063179813845191929, guid: a23639e2af64e9b40b6d75a789b6f471, type: 3}
-  gridSize: 100
+  gridSize: 20
   mode: mirror
   delayDuration: 0.1
   debug: 0
