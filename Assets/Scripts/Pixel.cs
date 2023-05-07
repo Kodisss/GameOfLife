@@ -26,7 +26,7 @@ public class Pixel : MonoBehaviour
         ChangeColor();
     }
 
-    void ChangeColor()
+    private void ChangeColor()
     {
         if (alive)
         {
@@ -38,10 +38,14 @@ public class Pixel : MonoBehaviour
         }
     }
 
-    void CheckStatus()
+    private void CheckStatus()
     {
         alive = game.GetStatus((int) positionX, (int) positionY);
     }
 
-
+    public void SwitchStatus()
+    {
+        if (!alive) alive = true;
+        else if (alive) alive = false;
+    }
 }
