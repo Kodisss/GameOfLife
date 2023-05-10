@@ -7,7 +7,6 @@ using UnityEngine.UIElements;
 
 public class GameOfLife : MonoBehaviour
 {
-    [SerializeField] private GameObject tilePrefab; // Prefab of the tile object
     [SerializeField] private int gridSize = 20; // Size of the grid
     [SerializeField] private string mode = "endless"; // Borders gestion "endless" or "mirror"
     [SerializeField] private float delayDuration = 1f;
@@ -19,9 +18,6 @@ public class GameOfLife : MonoBehaviour
     private int offset;
     private int sizeWithOffset;
 
-    private bool startGame;
-    private bool gameInitialized;
-
     [SerializeField] private bool debug = false;
 
     // Start is called before the first frame update
@@ -30,8 +26,8 @@ public class GameOfLife : MonoBehaviour
         offset = CalculateOffset();
         sizeWithOffset = gridSize + offset;
         CreateGrids();
-        SpawnTiles();
-        StartCoroutine(WaitForReturnKeyInput());
+        //InitializeGridBasedOnPlayersChoice();
+        SpawnGlider();
     }
 
     // Update is called once per frame
@@ -56,33 +52,7 @@ public class GameOfLife : MonoBehaviour
     {
         return cellGrid[x, y];
     }
-
-    public bool GetInitialized()
-    {
-        return gameInitialized;
-    }
     //////////////////////////////////////////////////////////////
-
-    private IEnumerator WaitForReturnKeyInput()
-    {
-        // Wait until the player presses the Return key
-        while (!startGame)
-        {
-            if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
-            {
-                // Player pressed the Return key
-                startGame = true;
-            }
-
-            yield return null;
-        }
-
-        // Do something after the Return key is pressed
-        Debug.Log("Return key pressed! Proceeding with the program.");
-
-        InitializeGridBasedOnPlayersChoice();
-        SpawnGlider();
-    }
 
     private void UpdateGrid()
     {
@@ -170,22 +140,6 @@ public class GameOfLife : MonoBehaviour
         }
     }
 
-    private void SpawnTiles()
-    {
-        // Iterate through the grid
-        for (int x = 0; x < sizeWithOffset; x++)
-        {
-            for (int y = 0; y < sizeWithOffset; y++)
-            {
-                // Calculate the position of the tile
-                Vector3 CellPosition = new Vector3(x, y, 0);
-
-                // Spawn a Cell at the calculated position
-                Instantiate(tilePrefab, CellPosition, Quaternion.identity);
-            }
-        }
-    }
-
     private void CreateGrids()
     {
         cellGrid = new bool[sizeWithOffset, sizeWithOffset];
@@ -213,8 +167,6 @@ public class GameOfLife : MonoBehaviour
 
             cellGrid[x, y] = cells[i].GetAlive();
         }
-
-        gameInitialized = true;
     }
 
     public int CalculateOffset()

@@ -23,8 +23,7 @@ public class Pixel : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        while (!game.GetInitialized()) ;
-        CheckStatus();
+        //CheckStatus();
         ChangeColor();
     }
 
@@ -47,7 +46,14 @@ public class Pixel : MonoBehaviour
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        alive = !alive; // Toggle the cell's state on click
+        if(alive)
+        {
+            alive = false;
+        }
+        if (!alive)
+        {
+            alive = true;
+        }
     }
 
     public bool GetAlive()
