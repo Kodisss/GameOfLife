@@ -19,6 +19,9 @@ public class GameOfLife : MonoBehaviour
     private int offset;
     private int sizeWithOffset;
 
+    private bool startGame;
+    private bool gameInitialized;
+
     [SerializeField] private bool debug = false;
 
     // Start is called before the first frame update
@@ -28,6 +31,7 @@ public class GameOfLife : MonoBehaviour
         sizeWithOffset = gridSize + offset;
         CreateGrids();
         SpawnTiles();
+        StartCoroutine(WaitForReturnKeyInput());
     }
 
     // Update is called once per frame
@@ -53,11 +57,32 @@ public class GameOfLife : MonoBehaviour
         return cellGrid[x, y];
     }
 
-    public string GetMode()
+    public bool GetInitialized()
     {
-        return mode;
+        return gameInitialized;
     }
     //////////////////////////////////////////////////////////////
+
+    private IEnumerator WaitForReturnKeyInput()
+    {
+        // Wait until the player presses the Return key
+        while (!startGame)
+        {
+            if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+            {
+                // Player pressed the Return key
+                startGame = true;
+            }
+
+            yield return null;
+        }
+
+        // Do something after the Return key is pressed
+        Debug.Log("Return key pressed! Proceeding with the program.");
+
+        InitializeGridBasedOnPlayersChoice();
+        SpawnGlider();
+    }
 
     private void UpdateGrid()
     {
@@ -170,10 +195,26 @@ public class GameOfLife : MonoBehaviour
         {
             for (int j = 0; j < sizeWithOffset; j++)
             {
-                cellGrid[i, j] = Random.value < 0.5f;
+                cellGrid[i, j] = false;
                 nextGeneration[i, j] = false;
             }
         }
+    }
+
+    private void InitializeGridBasedOnPlayersChoice()
+    {
+        Pixel[] cells = FindObjectsOfType<Pixel>();
+
+        // Iterate through each cell and update the game grid
+        for (int i = 0; i < cells.Length; i++)
+        {
+            int x = i % gridSize;
+            int y = i / gridSize;
+
+            cellGrid[x, y] = cells[i].GetAlive();
+        }
+
+        gameInitialized = true;
     }
 
     public int CalculateOffset()

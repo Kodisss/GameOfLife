@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Pixel : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class Pixel : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        while (!game.GetInitialized()) ;
         CheckStatus();
         ChangeColor();
     }
@@ -43,9 +45,13 @@ public class Pixel : MonoBehaviour
         alive = game.GetStatus((int) positionX, (int) positionY);
     }
 
-    public void SwitchStatus()
+    public void OnPointerClick(PointerEventData eventData)
     {
-        if (!alive) alive = true;
-        else if (alive) alive = false;
+        alive = !alive; // Toggle the cell's state on click
+    }
+
+    public bool GetAlive()
+    {
+        return alive;
     }
 }
