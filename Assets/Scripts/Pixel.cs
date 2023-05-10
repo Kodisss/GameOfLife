@@ -46,14 +46,7 @@ public class Pixel : MonoBehaviour
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if(alive)
-        {
-            alive = false;
-        }
-        if (!alive)
-        {
-            alive = true;
-        }
+        alive = !alive;
     }
 
     public bool GetAlive()
