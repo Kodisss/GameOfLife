@@ -149,7 +149,7 @@ public class GameOfLife : MonoBehaviour
         {
             for (int j = 0; j < sizeWithOffset; j++)
             {
-                cellGrid[i, j] = false;
+                cellGrid[i, j] = Random.value < 0.5;
                 nextGeneration[i, j] = false;
             }
         }
